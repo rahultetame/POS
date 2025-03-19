@@ -1,0 +1,12 @@
+@use './variables' as var;
+
+// Global styles
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: var.$bg-light;
+}
+
+button {
+  cursor: pointer;
+}
