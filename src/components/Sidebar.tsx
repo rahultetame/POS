@@ -59,7 +59,7 @@ const Sidebar = () => {
           width: isOpen ? 240 : 60,
           transition: 'width 0.3s',
           overflowX: 'hidden',
-          background: '#E2E8D9',
+          background: '#f1f6ef',
         },
       }}
     >

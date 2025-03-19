@@ -8,7 +8,7 @@
   white-space: nowrap;
 
   .category-button {
-    background: #d2e4c4;
+    background: var.$white;
     border: none;
     padding: 15px 20px;
     border-radius: 12px;
@@ -28,7 +28,7 @@
     }
 
     &.active {
-      background: #1c3b2f;
+      background: var.$highlight-color;
       color: white;
     }
   }
