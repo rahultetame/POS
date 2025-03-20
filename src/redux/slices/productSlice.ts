@@ -13,6 +13,7 @@ interface Product {
   stock: number;
   description: string;
   category: string;
+  images?: string;
 }
 
 interface ProductState {

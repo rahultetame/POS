@@ -3,13 +3,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addToCart } from '../../redux/slices/cartSlice';
 import SearchBar from '../../components/SearchBar';
 import CategoryFilter from './CategoryFilter';
+import ProductCard from '../../components/ProductCard';
 import '../../styles/ProductList.scss';
 import { RootState } from '../../redux/store';
 import { Box, Typography } from '@mui/material';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Cart from '../cart';
 
-const ProductList = () => {
+const Dashboard = () => {
   const dispatch = useDispatch();
   const { items: products } = useSelector((state: RootState) => state.products);
   const cartItems = useSelector((state: RootState) => state.cart.items);
@@ -34,6 +34,7 @@ const ProductList = () => {
       .includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
+
   return (
     <>
       <Box flex={1} p={0} overflow='auto'>
@@ -56,44 +57,17 @@ const ProductList = () => {
           <div className='product-grid'>
             {filteredProducts.length > 0 ? (
               filteredProducts?.map((product) => {
-                const isInCart = cartItems.some(
+                const isInCart = cartItems?.some(
                   (item) => item.sku === product.sku
                 );
 
                 return (
-                  <div className='product-card' key={product.sku}>
-                    <Box
-                      display={'flex'}
-                      flexDirection={'column'}
-                      alignItems={'center'}
-                      gap={1}
-                      flexGrow={1}
-                    >
-                      <img
-                        src={`/images/${product.sku}.png`}
-                        alt={product.name}
-                      />
-                      <h3>{product.name}</h3>
-                      <p>
-                        {product.weight} {product.measuringUnit}
-                      </p>
-                      <p className='price'>${product.price.toFixed(2)}</p>
-                    </Box>
-
-                    <button
-                      className={`add-to-cart ${isInCart ? 'added' : ''}`}
-                      onClick={() => dispatch(addToCart(product))}
-                      disabled={isInCart}
-                    >
-                      {isInCart ? (
-                        <>
-                          <CheckCircleIcon className='tick-icon' /> Added
-                        </>
-                      ) : (
-                        'Add to Cart'
-                      )}
-                    </button>
-                  </div>
+                  <ProductCard
+                    key={product.sku}
+                    product={product}
+                    isInCart={isInCart}
+                    onAddToCart={() => dispatch(addToCart(product))}
+                  />
                 );
               })
             ) : (
@@ -107,4 +81,4 @@ const ProductList = () => {
   );
 };
 
-export default ProductList;
+export default Dashboard;

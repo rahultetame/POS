@@ -1,32 +1,25 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
-import {
-  clearCart,
-  removeFromCart,
-  updateQuantity,
-} from '../../redux/slices/cartSlice';
-import {
-  Box,
-  Typography,
-  IconButton,
-  List,
-  ListItem,
-  Button,
-  Paper,
-} from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
+import { CartItem, clearCart } from '../../redux/slices/cartSlice';
+import { Box, Typography, List, Button, Paper } from '@mui/material';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import '../../styles/Cart.scss';
+import CartItemCard from '../../components/cartItemCard';
+import { useEffect, useRef } from 'react';
 
 const Cart = () => {
   const dispatch = useDispatch();
-  const cart = useSelector((state: RootState) => state.cart.items);
-  const totalAmount = useSelector(
+  const cart: CartItem[] = useSelector((state: RootState) => state.cart.items);
+  const totalAmount: number | undefined = useSelector(
     (state: RootState) => state?.cart?.totalAmount
   );
-  const orderId = 'ORD12345';
+  const cartItemsRef = useRef<HTMLUListElement>(null);
+  useEffect(() => {
+    if (cartItemsRef.current) {
+      cartItemsRef.current.scrollTop = cartItemsRef.current.scrollHeight;
+    }
+  }, [cart]);
+  const orderId: string = 'ORD12345';
 
   return (
     <Box className='cart-container'>
@@ -50,62 +43,9 @@ const Cart = () => {
             </Box>
           </Box>
 
-          <List className='cart-items'>
+          <List className='cart-items' ref={cartItemsRef}>
             {cart?.map((item) => (
-              <ListItem key={item.sku} className='cart-item'>
-                <Box className='cart-item-info'>
-                  <Box className='cart-item-image'>
-                    <img src={`/images/${item.sku}.png`} alt={item.name} />
-                  </Box>
-                  <Box className='cart-item-name'>
-                    <Typography>{item.name}</Typography>
-                    <Typography className='cart-item-measurement'>
-                      {item.quantity} × {item.weight} {item.measuringUnit}
-                    </Typography>
-                    <Typography className='cart-item-price'>
-                      ${(item.price * item.quantity).toFixed(2)}
-                    </Typography>
-                  </Box>
-                </Box>
-                <Box className='cart-item-controls'>
-                  <IconButton
-                    disabled={item.quantity === 0}
-                    onClick={() => {
-                      if (item.quantity === 1) {
-                        dispatch(removeFromCart(item.sku));
-                      } else {
-                        dispatch(
-                          updateQuantity({
-                            sku: item.sku,
-                            quantity: item.quantity - 1,
-                          })
-                        );
-                      }
-                    }}
-                  >
-                    <RemoveIcon />
-                  </IconButton>
-                  <Typography>{item.quantity}</Typography>
-                  <IconButton
-                    onClick={() =>
-                      dispatch(
-                        updateQuantity({
-                          sku: item.sku,
-                          quantity: item.quantity + 1,
-                        })
-                      )
-                    }
-                  >
-                    <AddIcon />
-                  </IconButton>
-                  <IconButton
-                    onClick={() => dispatch(removeFromCart(item.sku))}
-                    color='error'
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </Box>
-              </ListItem>
+              <CartItemCard key={item.sku} item={item} />
             ))}
           </List>
         </>
