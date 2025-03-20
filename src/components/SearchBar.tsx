@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../styles/SearchBar.scss';
+import SearchIcon from '@mui/icons-material/Search';
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
@@ -21,9 +22,9 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
         value={query}
         onChange={handleSearch}
       />
-      <button>
-        <i className='fas fa-search'></i>
-      </button>
+      <>
+        <SearchIcon />
+      </>
     </div>
   );
 };

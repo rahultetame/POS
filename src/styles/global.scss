@@ -5,8 +5,22 @@ body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
   background-color: var.$bg-light;
+  color: var.$text-color !important;
 }
 
+// Common styles start
 button {
   cursor: pointer;
 }
+.primary-button {
+  background: var.$highlight-color !important;
+  color: var.$white !important;
+  transition: 0.3s ease !important;
+}
+.secondary-button {
+  background: var.$primary-color !important;
+  color: var.$white !important;
+  transition: 0.3s ease !important;
+}
+
+// Common styles end

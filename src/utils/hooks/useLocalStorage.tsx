@@ -14,7 +14,7 @@ const useLocalStorage = () => {
       try {
         const localStorageToken = localStorage.getItem('token');
         const localStorageAdminDetails = localStorage.getItem('loginDetails');
-        const localStorageLocation = localStorage.getItem('language');
+        // const localStorageLocation = localStorage.getItem('language');
 
         if (localStorageAdminDetails) {
           const adminDetails = JSON.parse(localStorageAdminDetails);

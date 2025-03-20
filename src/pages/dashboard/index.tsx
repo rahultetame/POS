@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addToCart } from '../../redux/slices/cartSlice';
 import SearchBar from '../../components/SearchBar';
 import CategoryFilter from './CategoryFilter';
-import ProductCard from '../../components/ProductCard';
+import ProductCard from '../../components/cards/ProductCard';
 import '../../styles/ProductList.scss';
 import { RootState } from '../../redux/store';
 import { Box, Typography } from '@mui/material';

@@ -3,7 +3,7 @@ import {
   CartItem,
   removeFromCart,
   updateQuantity,
-} from '../redux/slices/cartSlice';
+} from '../../redux/slices/cartSlice';
 import { Box, Typography, IconButton, ListItem } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
@@ -63,12 +63,12 @@ const CartItemCard = ({ item }: CartItemCardProps) => {
         >
           <AddIcon />
         </IconButton>
-        <IconButton
+        {/* <IconButton
           onClick={() => dispatch(removeFromCart(item.sku))}
           color='error'
         >
           <DeleteIcon />
-        </IconButton>
+        </IconButton> */}
       </Box>
     </ListItem>
   );

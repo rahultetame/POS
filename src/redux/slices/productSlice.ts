@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { productListData } from '../../data';
 
-interface Product {
+export interface Product {
   name: string;
   price: number;
   weight: number;
@@ -13,7 +13,8 @@ interface Product {
   stock: number;
   description: string;
   category: string;
-  images?: string;
+  image?: string;
+  ebt: boolean;
 }
 
 interface ProductState {

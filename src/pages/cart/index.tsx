@@ -4,15 +4,29 @@ import { CartItem, clearCart } from '../../redux/slices/cartSlice';
 import { Box, Typography, List, Button, Paper } from '@mui/material';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import '../../styles/Cart.scss';
-import CartItemCard from '../../components/cartItemCard';
-import { useEffect, useRef } from 'react';
+import CartItemCard from '../../components/cards/cartItemCard';
+import { useEffect, useRef, useState } from 'react';
+import ConfirmDialog from '../../components/popup/ConfirmDialog';
+import CancelButton from '../../components/buttons/CancelButton';
 
 const Cart = () => {
   const dispatch = useDispatch();
-  const cart: CartItem[] = useSelector((state: RootState) => state.cart.items);
+  const [openConfirm, setOpenConfirm] = useState(false);
+
   const totalAmount: number | undefined = useSelector(
     (state: RootState) => state?.cart?.totalAmount
   );
+  const ebtSubtotal: number = useSelector(
+    (state: RootState) => state.cart.ebtSubtotal
+  );
+  const nonEbtSubtotal: number = useSelector(
+    (state: RootState) => state.cart.nonEbtSubtotal
+  );
+  const taxAmount: number = useSelector(
+    (state: RootState) => state.cart.taxAmount
+  );
+  const cart: CartItem[] = useSelector((state: RootState) => state.cart.items);
+
   const cartItemsRef = useRef<HTMLUListElement>(null);
   useEffect(() => {
     if (cartItemsRef.current) {
@@ -20,6 +34,19 @@ const Cart = () => {
     }
   }, [cart]);
   const orderId: string = 'ORD12345';
+
+  const handleClearCartClick = () => {
+    setOpenConfirm(true);
+  };
+
+  const handleConfirmClearCart = () => {
+    dispatch(clearCart());
+    setOpenConfirm(false);
+  };
+
+  const handleCancelClearCart = () => {
+    setOpenConfirm(false);
+  };
 
   return (
     <Box className='cart-container'>
@@ -29,12 +56,9 @@ const Cart = () => {
             <Box className='cart-title'>
               <Typography>Order ID : {orderId}</Typography>
               {cart.length > 0 && (
-                <Button
-                  onClick={() => dispatch(clearCart())}
-                  className='clear-cart'
-                >
+                <CancelButton onClick={handleClearCartClick}>
                   Clear
-                </Button>
+                </CancelButton>
               )}
             </Box>
             <Box className='cart-title'>
@@ -62,23 +86,21 @@ const Cart = () => {
         <Box className='cart-footer'>
           <Box className='cart-summary'>
             <h3>Payment Summary</h3>
-            <Box display='flex' justifyContent='space-between'>
+            <Box display='flex' mt={2} justifyContent='space-between'>
               <Typography variant='body1'>EBT SNAP Items:</Typography>
-              <Typography variant='body1'>$34.36</Typography>
+              <Typography variant='body1'>${ebtSubtotal.toFixed(2)}</Typography>
             </Box>
-            <Box display='flex' justifyContent='space-between'>
+            <Box display='flex' mt={1} justifyContent='space-between'>
               <Typography variant='body1'>NON-EBT SNAP Items:</Typography>
-              <Typography variant='body1'>$23.48</Typography>
+              <Typography variant='body1'>
+                ${nonEbtSubtotal.toFixed(2)}
+              </Typography>
             </Box>
-            <Box display='flex' justifyContent='space-between'>
-              <Typography variant='body2'>Tax (2%):</Typography>
-              <Typography variant='body2'>+ $2.13</Typography>
+            <Box display='flex' mt={1} justifyContent='space-between'>
+              <Typography variant='body2'>Tax (7% on Non-EBT):</Typography>
+              <Typography variant='body2'>+ ${taxAmount.toFixed(2)}</Typography>
             </Box>
-            <Box display='flex' justifyContent='space-between'>
-              <Typography variant='body2'>Discount (10%):</Typography>
-              <Typography variant='body2'>- $11.57</Typography>
-            </Box>
-            <Box display='flex' justifyContent='space-between'>
+            <Box display='flex' mt={2} justifyContent='space-between'>
               <Typography variant='h6' className='total'>
                 Total:
               </Typography>
@@ -86,19 +108,26 @@ const Cart = () => {
                 ${totalAmount?.toFixed(2)}
               </Typography>
             </Box>
-          </Box>
-          <Box className='payment-options'>
-            <Paper className='payment-method'>
-              <Button className='payment-button'>EBT</Button>
-              <Button className='payment-button'>Card</Button>
-              <Button className='payment-button'>Cash</Button>
-            </Paper>
-          </Box>
-          {/* <Button variant="contained" fullWidth className="checkout-button">
+            <Box className='payment-options'>
+              <Paper className='payment-method'>
+                <Button className='payment-button'>EBT</Button>
+                <Button className='payment-button'>Card</Button>
+                <Button className='payment-button'>Cash</Button>
+              </Paper>
+            </Box>
+            {/* <Button variant="contained" fullWidth className="checkout-button">
             Check Out
           </Button> */}
+          </Box>
         </Box>
       )}
+      <ConfirmDialog
+        open={openConfirm}
+        title='Clear Cart?'
+        content='Are you sure you want to clear your cart?'
+        onConfirm={handleConfirmClearCart}
+        onCancel={handleCancelClearCart}
+      />
     </Box>
   );
 };

@@ -5,20 +5,31 @@ export interface CartItem {
   price: number;
   weight: number;
   measuringUnit: string;
+  isSelected: boolean;
   quantity: number;
   sku: string;
   brand: string;
+  stock: number;
+  description: string;
+  category: string;
   image?: string;
+  ebt: boolean;
 }
 
 interface CartState {
   items: CartItem[];
   totalAmount: number;
+  taxAmount: number;
+  ebtSubtotal: number;
+  nonEbtSubtotal: number;
 }
 
 const initialState: CartState = {
   items: [],
   totalAmount: 0,
+  taxAmount: 0,
+  ebtSubtotal: 0,
+  nonEbtSubtotal: 0,
 };
 
 const cartSlice = createSlice({
@@ -34,17 +45,38 @@ const cartSlice = createSlice({
       } else {
         state.items.push({ ...action.payload, quantity: 1 });
       }
-      state.totalAmount += action.payload.price;
+
+      // Recalculate totals
+      state.ebtSubtotal = state.items
+        .filter((item) => item.ebt)
+        .reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+      state.nonEbtSubtotal = state.items
+        .filter((item) => !item.ebt)
+        .reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+      state.taxAmount = state.nonEbtSubtotal * 0.07;
+      state.totalAmount =
+        state.ebtSubtotal + state.nonEbtSubtotal + state.taxAmount;
     },
+
     removeFromCart: (state, action: PayloadAction<string>) => {
-      const existingItem = state.items.find(
-        (item) => item.sku === action.payload
-      );
-      if (existingItem) {
-        state.totalAmount -= existingItem.price * existingItem.quantity;
-        state.items = state.items.filter((item) => item.sku !== action.payload);
-      }
+      state.items = state.items.filter((item) => item.sku !== action.payload);
+
+      // Recalculate totals
+      state.ebtSubtotal = state.items
+        .filter((item) => item.ebt)
+        .reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+      state.nonEbtSubtotal = state.items
+        .filter((item) => !item.ebt)
+        .reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+      state.taxAmount = state.nonEbtSubtotal * 0.07;
+      state.totalAmount =
+        state.ebtSubtotal + state.nonEbtSubtotal + state.taxAmount;
     },
+
     updateQuantity: (
       state,
       action: PayloadAction<{ sku: string; quantity: number }>
@@ -53,15 +85,29 @@ const cartSlice = createSlice({
         (item) => item.sku === action.payload.sku
       );
       if (existingItem) {
-        state.totalAmount +=
-          (action.payload.quantity - existingItem.quantity) *
-          existingItem.price;
         existingItem.quantity = action.payload.quantity;
       }
+
+      // Recalculate totals
+      state.ebtSubtotal = state.items
+        .filter((item) => item.ebt)
+        .reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+      state.nonEbtSubtotal = state.items
+        .filter((item) => !item.ebt)
+        .reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+      state.taxAmount = state.nonEbtSubtotal * 0.07;
+      state.totalAmount =
+        state.ebtSubtotal + state.nonEbtSubtotal + state.taxAmount;
     },
+
     clearCart: (state) => {
       state.items = [];
       state.totalAmount = 0;
+      state.taxAmount = 0;
+      state.ebtSubtotal = 0;
+      state.nonEbtSubtotal = 0;
     },
   },
 });

@@ -1,14 +1,9 @@
 import { Box } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-type Product = {
-  sku: string;
-  name: string;
-  category: string;
-  price: number;
-  weight: number;
-  measuringUnit: string;
-  image?: string;
-};
+import PrimaryButton from '../buttons/PrimaryButton';
+import SecondaryButton from '../buttons/SecondaryButton';
+import { Product } from '../../redux/slices/productSlice';
+
 type ProductCardProps = {
   product: Product;
   isInCart: boolean;
@@ -35,19 +30,13 @@ const ProductCard = ({ product, isInCart, onAddToCart }: ProductCardProps) => {
         <p className='price'>${product.price.toFixed(2)}</p>
       </Box>
 
-      <button
-        className={`add-to-cart ${isInCart ? 'added' : ''}`}
-        onClick={onAddToCart}
-        disabled={isInCart}
-      >
-        {isInCart ? (
-          <>
-            <CheckCircleIcon className='tick-icon' /> Added
-          </>
-        ) : (
-          'Add to Cart'
-        )}
-      </button>
+      {isInCart ? (
+        <SecondaryButton disabled>
+          <CheckCircleIcon className='tick-icon' /> Added
+        </SecondaryButton>
+      ) : (
+        <PrimaryButton onClick={onAddToCart}>Add to Cart</PrimaryButton>
+      )}
     </div>
   );
 };
