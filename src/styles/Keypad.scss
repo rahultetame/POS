@@ -1,0 +1,19 @@
+@use './variables' as var;
+
+.keypad-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 10px;
+
+  button {
+    height: 85px;
+    height: 85px;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 8px;
+    background-color: var.$highlight-color !important;
+    color: var.$white !important;
+    transition: 0.2s ease-in-out;
+  }
+}

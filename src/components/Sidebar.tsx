@@ -47,10 +47,14 @@ const menuItems = [
 const Sidebar = () => {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
-  const isProductPage = location.pathname.toLowerCase();
+
+  const getActivePath = (itemPath: string) => {
+    return location.pathname.toLowerCase() === itemPath.toLowerCase();
+  };
 
   return (
     <Drawer
+      className='sidebar-menu'
       variant='permanent'
       sx={{
         width: isOpen ? 240 : 60,
@@ -59,7 +63,7 @@ const Sidebar = () => {
           width: isOpen ? 240 : 60,
           transition: 'width 0.3s',
           overflowX: 'hidden',
-          background: '#f1f6ef',
+          // background: '#f1f6ef',
         },
       }}
     >
@@ -90,18 +94,17 @@ const Sidebar = () => {
         <Box width={isOpen ? '100%' : '60px'} flexGrow={1}>
           <List>
             {menuItems?.map((item, index) => {
-              const isActive = isProductPage?.includes(
-                item.title.toLowerCase()
-              );
+              const isActive = getActivePath(item.path);
               return (
                 <ListItem key={index} disablePadding>
                   <ListItemButton
                     component={NavLink}
                     to={item.path}
+                    className={isActive ? 'active' : ''}
                     sx={() => ({
                       '&.active': {
                         // color: theme.palette.secondary.main,
-                        color: '#1c3b2f',
+                        // color: '#1c3b2f',
                         textDecoration: 'none',
                       },
                       minHeight: 48,

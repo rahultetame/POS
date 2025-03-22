@@ -4,7 +4,7 @@
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
-  background-color: var.$bg-light;
+  background-color: var.$bg-dark !important;
   color: var.$text-color !important;
 }
 
@@ -24,3 +24,18 @@ button {
 }
 
 // Common styles end
+
+// sidebar styles
+.sidebar-menu {
+  .active {
+    background-color: var.$highlight-color;
+    color: var.$white;
+    &:hover {
+      background-color: var.$highlight-color;
+      color: var.$white;
+    }
+    svg {
+      fill: var.$white;
+    }
+  }
+}

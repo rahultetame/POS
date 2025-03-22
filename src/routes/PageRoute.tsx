@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
-import { Fragment, useMemo } from 'react';
+import { useMemo } from 'react';
 import { securedRoutesMap, unsecureRoutes } from './Routers';
-import useLocalStorage from '../utils/hooks/useLocalStorage';
+// import useLocalStorage from '../utils/hooks/useLocalStorage';
 import Layout from '../layouts/Layout';
 import LoginLayout from '../layouts/Layout';
 import { PageNotFound } from './LazyPath';

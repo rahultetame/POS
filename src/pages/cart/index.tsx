@@ -8,9 +8,11 @@ import CartItemCard from '../../components/cards/cartItemCard';
 import { useEffect, useRef, useState } from 'react';
 import ConfirmDialog from '../../components/popup/ConfirmDialog';
 import CancelButton from '../../components/buttons/CancelButton';
+import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const totalAmount: number | undefined = useSelector(
@@ -50,23 +52,21 @@ const Cart = () => {
 
   return (
     <Box className='cart-container'>
+      <Box className='cart-header'>
+        <Box className='cart-title'>
+          <Typography>Order ID : {orderId}</Typography>
+          {cart.length > 0 && (
+            <CancelButton onClick={handleClearCartClick}>Clear</CancelButton>
+          )}
+        </Box>
+        <Box className='cart-title'>
+          <Typography variant='h6'>Cart</Typography>
+          <Typography>{cart.length} Items</Typography>
+        </Box>
+        <hr />
+      </Box>
       {cart.length > 0 ? (
         <>
-          <Box className='cart-header'>
-            <Box className='cart-title'>
-              <Typography>Order ID : {orderId}</Typography>
-              {cart.length > 0 && (
-                <CancelButton onClick={handleClearCartClick}>
-                  Clear
-                </CancelButton>
-              )}
-            </Box>
-            <Box className='cart-title'>
-              <Typography variant='h6'>Cart</Typography>
-              <Typography>{cart.length} Items</Typography>
-            </Box>
-          </Box>
-
           <List className='cart-items' ref={cartItemsRef}>
             {cart?.map((item) => (
               <CartItemCard key={item.sku} item={item} />
@@ -86,21 +86,22 @@ const Cart = () => {
         <Box className='cart-footer'>
           <Box className='cart-summary'>
             <h3>Payment Summary</h3>
-            <Box display='flex' mt={2} justifyContent='space-between'>
+            <Box display='flex' pl={1} mt={2} justifyContent='space-between'>
               <Typography variant='body1'>EBT SNAP Items:</Typography>
               <Typography variant='body1'>${ebtSubtotal.toFixed(2)}</Typography>
             </Box>
-            <Box display='flex' mt={1} justifyContent='space-between'>
+            <Box display='flex' pl={1} mt={1} justifyContent='space-between'>
               <Typography variant='body1'>NON-EBT SNAP Items:</Typography>
               <Typography variant='body1'>
                 ${nonEbtSubtotal.toFixed(2)}
               </Typography>
             </Box>
-            <Box display='flex' mt={1} justifyContent='space-between'>
+            <Box display='flex' pl={1} mt={1} justifyContent='space-between'>
               <Typography variant='body2'>Tax (7% on Non-EBT):</Typography>
               <Typography variant='body2'>+ ${taxAmount.toFixed(2)}</Typography>
             </Box>
-            <Box display='flex' mt={2} justifyContent='space-between'>
+            <hr />
+            <Box display='flex' pl={1} mt={1} justifyContent='space-between'>
               <Typography variant='h6' className='total'>
                 Total:
               </Typography>
@@ -110,7 +111,14 @@ const Cart = () => {
             </Box>
             <Box className='payment-options'>
               <Paper className='payment-method'>
-                <Button className='payment-button'>EBT</Button>
+                <Button
+                  onClick={() => {
+                    navigate('/payment');
+                  }}
+                  className='payment-button'
+                >
+                  EBT
+                </Button>
                 <Button className='payment-button'>Card</Button>
                 <Button className='payment-button'>Cash</Button>
               </Paper>

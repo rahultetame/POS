@@ -22,6 +22,7 @@ interface CartState {
   taxAmount: number;
   ebtSubtotal: number;
   nonEbtSubtotal: number;
+  taxableNonEbtSubTotal: number;
 }
 
 const initialState: CartState = {
@@ -30,6 +31,7 @@ const initialState: CartState = {
   taxAmount: 0,
   ebtSubtotal: 0,
   nonEbtSubtotal: 0,
+  taxableNonEbtSubTotal: 0,
 };
 
 const cartSlice = createSlice({
@@ -56,6 +58,7 @@ const cartSlice = createSlice({
         .reduce((sum, item) => sum + item.price * item.quantity, 0);
 
       state.taxAmount = state.nonEbtSubtotal * 0.07;
+      state.taxableNonEbtSubTotal = state.nonEbtSubtotal + state.taxAmount;
       state.totalAmount =
         state.ebtSubtotal + state.nonEbtSubtotal + state.taxAmount;
     },
@@ -73,6 +76,7 @@ const cartSlice = createSlice({
         .reduce((sum, item) => sum + item.price * item.quantity, 0);
 
       state.taxAmount = state.nonEbtSubtotal * 0.07;
+      state.taxableNonEbtSubTotal = state.nonEbtSubtotal + state.taxAmount;
       state.totalAmount =
         state.ebtSubtotal + state.nonEbtSubtotal + state.taxAmount;
     },
@@ -98,6 +102,7 @@ const cartSlice = createSlice({
         .reduce((sum, item) => sum + item.price * item.quantity, 0);
 
       state.taxAmount = state.nonEbtSubtotal * 0.07;
+      state.taxableNonEbtSubTotal = state.nonEbtSubtotal + state.taxAmount;
       state.totalAmount =
         state.ebtSubtotal + state.nonEbtSubtotal + state.taxAmount;
     },

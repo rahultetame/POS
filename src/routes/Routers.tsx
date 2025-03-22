@@ -8,7 +8,8 @@ import {
   Inventory,
   Pricing,
   Settings,
-  PageNotFound,
+  Payment,
+  // PageNotFound,
 } from './LazyPath';
 import { path } from './Path';
 
@@ -71,6 +72,12 @@ const securedRoutesMap: RouteTemplate[] = [
   {
     path: `${path.SETTINGS}`,
     Component: Settings,
+    type: 'protected',
+    role: 'admin',
+  },
+  {
+    path: `${path.PAYMENT}`,
+    Component: Payment,
     type: 'protected',
     role: 'admin',
   },

@@ -5,9 +5,10 @@ import {
   updateQuantity,
 } from '../../redux/slices/cartSlice';
 import { Box, Typography, IconButton, ListItem } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
+// import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import ebtIcon from '../../assets/images/etb.png';
 
 interface CartItemCardProps {
   item: CartItem;
@@ -17,13 +18,22 @@ const CartItemCard = ({ item }: CartItemCardProps) => {
   const dispatch = useDispatch();
 
   return (
-    <ListItem key={item.sku} className='cart-item'>
+    <ListItem
+      key={item.sku}
+      className={`cart-item ${!item.ebt ? 'non-ebt' : ''}`}
+    >
       <Box className='cart-item-info'>
+        {item.ebt && (
+          <Box className='ebt-icon-container'>
+            <img src={ebtIcon} alt={'EBT'} />
+          </Box>
+        )}
+
         <Box className='cart-item-image'>
           <img src={item.image} alt={item.name} />
         </Box>
         <Box className='cart-item-name'>
-          <Typography>{item.name}</Typography>
+          <Typography className='cart-item-title'>{item.name}</Typography>
           <Typography className='cart-item-measurement'>
             {item.quantity} × {item.weight} {item.measuringUnit}
           </Typography>

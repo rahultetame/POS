@@ -9,6 +9,7 @@ enum path {
   RESETOTP = '/reset-password',
 
   //secured paths
+  //menu paths
   CATEGORIES = '/categories',
   REPORTING = '/reporting',
   INVENTORY = '/inventory',
@@ -16,6 +17,9 @@ enum path {
   SETTINGS = '/settings',
   ACCOUNT = '/account',
   // OTHER SECURED PATHS HERE
+
+  // payment paths
+  PAYMENT = '/payment',
 }
 
 export { path };
